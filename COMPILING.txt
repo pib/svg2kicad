@@ -1,0 +1,7 @@
+The command line version may be compiled with gcc using the following command:
+
+gcc -lm -o svg2kicad svg_kicad.c
+
+The Windows executables were compiled with Microsoft Visual C++ 6.0, and a
+Microsoft Visual Studio project file is supplied.   The command line version
+is identical for all platforms apart from very minor C language variations.
