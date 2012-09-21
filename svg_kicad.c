@@ -56,62 +56,49 @@ int main(int argc, char *argv[ ]) {
         if (stricmp(argv[nArg], "-i") == 0) {
             nArgSVG = nArg + 1;
             bExpectingParam = true;
-        }
-        else if (stricmp(argv[nArg], "-o") == 0) {
+        } else if (stricmp(argv[nArg], "-o") == 0) {
             nArgKicad = nArg + 1;
             bExpectingParam = true;
-        }
-        else if (stricmp(argv[nArg], "-t") == 0) {
+        } else if (stricmp(argv[nArg], "-t") == 0) {
             nArgType = nArg + 1;
             bExpectingParam = true;
-        }
-        else if (stricmp(argv[nArg], "-r") == 0) {
+        } else if (stricmp(argv[nArg], "-r") == 0) {
             nArgScale = nArg + 1;
             if (cScaleType == -1) {
                 cScaleType = 0;
-            }
-            else {
+            } else {
                 // Too many scale types specified
 
                 cScaleType = -2;
             }
             bExpectingParam = true;
-        }
-        else if (stricmp(argv[nArg], "-w") == 0) {
+        } else if (stricmp(argv[nArg], "-w") == 0) {
             nArgScale = nArg + 1;
-            if (cScaleType == -1)
-            {
+            if (cScaleType == -1) {
                 cScaleType = 1;
-            }
-            else
-            {
+            } else {
                 // Too many scale types specified
 
                 cScaleType = -2;
             }
             bExpectingParam = true;
-        }
-        else if (stricmp(argv[nArg], "-h") == 0) {
+        } else if (stricmp(argv[nArg], "-h") == 0) {
             nArgScale = nArg + 1;
             if (cScaleType == -1) {
                 cScaleType = 2;
-            }
-            else {
+            } else {
                 // Too many scale types specified
 
                 cScaleType = -2;
             }
             bExpectingParam = true;
-        }
-        else if (stricmp(argv[nArg], "-s") == 0) {
+        } else if (stricmp(argv[nArg], "-s") == 0) {
             nArgSmooth = nArg + 1;
             bExpectingParam = true;
-        }
-        else if (stricmp(argv[nArg], "-n") == 0) {
+        } else if (stricmp(argv[nArg], "-n") == 0) {
             nArgName = nArg + 1;
             bExpectingParam = true;
-        }
-        else if (*argv[nArg] == '-') {
+        } else if (*argv[nArg] == '-') {
             if (!bExpectingParam) {
                 PrintUsage();
                 return -1;
@@ -141,33 +128,28 @@ int main(int argc, char *argv[ ]) {
             if (*pszSVGPathname++ == '.') {
                 if (stricmp(pszSVGPathname, "mod") == 0) {
                     cType = 'm';
-                }
-                else if (stricmp(pszSVGPathname, "lib") == 0) {
+                } else if (stricmp(pszSVGPathname, "lib") == 0) {
                     cType = 'l';
                 }
             }
 
             printf("Output type not specified; using '%c'\r\n", cType);
-        }
-        else {
+        } else {
             cType = argv[nArgType][0];
         }
 
         if (nArgScale == 0) {
             fScale = 50;
             printf("Scale not specified; using %fx\r\n", fScale);
-        }
-        else {
+        } else {
             if (sscanf(argv[nArgScale], "%f%c%c", &fScale, &cUnits1, &cUnits2) > 1) {
                 if (((cUnits1 == 'i') || (cUnits1 == 'I')) && ((cUnits2 == 'n') || (cUnits2 == 'N'))) {
                     // Using inches
-                }
-                else if (((cUnits1 == 'm') || (cUnits1 == 'M')) && ((cUnits2 == 'm') || (cUnits2 == 'M'))) {
+                } else if (((cUnits1 == 'm') || (cUnits1 == 'M')) && ((cUnits2 == 'm') || (cUnits2 == 'M'))) {
                     // Using metric
 
                     fScale = fScale / 25.4f;
-                }
-                else {
+                } else {
                     PrintUsage();
                     return -1;
                 }
@@ -177,8 +159,7 @@ int main(int argc, char *argv[ ]) {
         if (nArgSmooth == 0) {
             unSmoothness = 20;
             printf("Smoothness not specified; using %u\r\n", unSmoothness);
-        }
-        else {
+        } else {
             sscanf(argv[nArgSmooth], "%u", &unSmoothness);
             if (unSmoothness < 1) {
                 PrintUsage();
@@ -190,13 +171,11 @@ int main(int argc, char *argv[ ]) {
             pszName = malloc(8);
             if (pszName == NULL) {
                 Log("Out of memory.");
-            }
-            else {
+            } else {
                 strcpy(pszName, "FROMSVG");
                 printf("Name not specified; using '%s'\r\n", pszName);
             }
-        }
-        else {
+        } else {
             nLen = strlen(argv[nArgName]);
             for (nChar = 0; nChar < nLen; nChar++) {
                 if (isspace(argv[nArgName][nChar])) {
@@ -207,8 +186,7 @@ int main(int argc, char *argv[ ]) {
             pszName = malloc(strlen(argv[nArgName]) + 1);
             if (pszName == NULL) {
                 Log("Out of memory.");
-            }
-            else {
+            } else {
                 strcpy(pszName, argv[nArgName]);
             }
         }
@@ -222,8 +200,7 @@ int main(int argc, char *argv[ ]) {
             free(pszName);
         }
 
-    }
-    else {
+    } else {
         PrintUsage();
         nRet = -1;
     }
@@ -274,13 +251,11 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
     pfileSVG = fopen(pszSVGPathname, "rb");
     if (pfileSVG == NULL) {
         Log("Unable to open SVG file for reading.");
-    }
-    else {
+    } else {
         pfileKicad = fopen(pszKicadPathname, "wb");
         if (pfileKicad == NULL) {
             Log("Unable to open SVG file for writing.");
-        }
-        else {
+        } else {
             // Write the appropriate header
 
             time(&timeNow);
@@ -294,8 +269,7 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
                             "F0 \"DWG\" 0 100 60 H V C C\r\n"
                             "F1 \"%s\" 0 -100 60 H V C C\r\n"
                             "DRAW\r\n", szTimestamp, pszName, pszName, pszName);
-            }
-            else {
+            } else {
                 strftime(szTimestamp, 99, " %c", localtime(&timeNow));
                 fprintf(pfileKicad, "PCBNEW-LibModule-V%s\r\n"
                             "# encoding utf-8\r\n"
@@ -320,8 +294,7 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
                     szTag = (char*) malloc(nLenReqd);
                     if (szTag == NULL) {
                         Log("Out of memory.");
-                    }
-                    else {
+                    } else {
                         // http://www.w3.org/TR/SVG/shapes.html
 
                         *szTag = 0;
@@ -329,28 +302,24 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
                         if (bInDefs) {
                             if (IsTag(szTag, "/defs")) {
                                 bInDefs = false;
-                            }
-                            else {
+                            } else {
                                 // Save for later use
 
                                 if (szDefs == NULL) {
                                     szDefs = malloc(strlen(szTag) + 3);
                                     if (szDefs == NULL) {
                                         Log("Out of memory.");
-                                    }
-                                    else {
+                                    } else {
                                         *szDefs = 0;
                                     }
-                                }
-                                else {
-                                    int                nLen;
+                                } else {
+                                    int nLen;
 
                                     nLen = strlen(szDefs);
                                     szDefs = realloc(szDefs, nLen + strlen(szTag) + 3);
                                     if (szDefs == NULL) {
                                         Log("Out of memory.");
-                                    }
-                                    else {
+                                    } else {
                                         *(szDefs + nLen) = 0;
                                     }
                                 }
@@ -376,8 +345,7 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
                                         *pszText++ = (char) nChar;
                                         if (nChar == '<') {
                                             bInTag = true;
-                                        }
-                                        else if (nChar == '>') {
+                                        } else if (nChar == '>') {
                                             bInTag = false;
                                         }
                                     }
@@ -387,25 +355,20 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
                                 szDefs = realloc(szDefs, nLen + strlen(szText) + 4);
                                 if (szDefs == NULL) {
                                     Log("Out of memory.");
-                                }
-                                else {
+                                } else {
                                     *(szDefs + nLen) = 0;
                                 }
                                 strcat(szDefs, szText);
                                 strcat(szDefs, ">");
                             }
-                        }
-                        else {
+                        } else {
                             if (IsTag(szTag, "g")) {
                                 GetTransform(szTag, &fXTranslate, &fYTranslate, &fRotation);
-                            }
-                            else if (IsTag(szTag, "/g")) {
+                            } else if (IsTag(szTag, "/g")) {
                                 fXTranslate = fYTranslate = fRotation = 0;
-                            }
-                            else if (IsTag(szTag, "defs")) {
+                            } else if (IsTag(szTag, "defs")) {
                                 bInDefs = true;
-                            }
-                            else if (IsTag(szTag, "svg")) {
+                            } else if (IsTag(szTag, "svg")) {
                                 GetSize(szTag, &fWidth, &fHeight);
                                 switch (m_cScaleType) {
                                 case 0:
@@ -423,8 +386,7 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
                                         if (cType == 'l') {
                                             fScale = fScale / 10;
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         Log("SVG file does not specify a width; using relative scaling.");
                                     }
                                     break;
@@ -438,22 +400,19 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
                                         if (cType == 'l') {
                                             fScale = fScale / 10;
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         Log("SVG file does not specify a height; using relative scaling.");
                                     }
                                     break;
                                 }
-                            }
-                            else {
+                            } else {
                                 ProcessTag(pfileSVG, NULL, pfileKicad, cType, szTag, fXTranslate, fYTranslate, fRotation, fScale, unSmoothness, szDefs);
                             }
                         }
                         free(szTag);
                     }
                 }
-            }
-            while (nLenReqd > 0);
+            } while (nLenReqd > 0);
         }
     }
 
@@ -463,8 +422,7 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
     if (pfileKicad != NULL) {
         if (cType == 'l') {
             fprintf(pfileKicad, "ENDDRAW\r\nENDDEF\r\n#\r\n#End Library");
-        }
-        else {
+        } else {
             fprintf(pfileKicad, "$EndMODULE %s\r\n$EndLIBRARY\r\n", pszName);
         }
         fclose(pfileKicad);
@@ -480,9 +438,9 @@ int SVG2Kicad(const char *pszSVGPathname, const char *pszKicadPathname, const ch
 }
 
 void GetTransform(char *pszTag, float *pfXTranslate, float *pfYTranslate, float *pfRotation) {
-    char            *pszTranslate;
-    char            *pszRotate;
-    char            *pszTerminator;
+    char *pszTranslate;
+    char *pszRotate;
+    char *pszTerminator;
 
     *pfXTranslate = *pfYTranslate = *pfRotation = 0;
     pszRotate = pszTranslate = GetVar(pszTag, " transform=");
@@ -517,8 +475,7 @@ void GetTransform(char *pszTag, float *pfXTranslate, float *pfYTranslate, float 
                     *pfRotation = 2 * PI * *pfRotation / 360;
                     pszRotate = NULL;
                 }
-            }
-            while ((pszRotate != NULL) && (*pszRotate != ')') && (*pszRotate != '>') && (*pszRotate != 0));
+            } while ((pszRotate != NULL) && (*pszRotate != ')') && (*pszRotate != '>') && (*pszRotate != 0));
         }
 
         // Remove temporary zero terminator
@@ -528,10 +485,10 @@ void GetTransform(char *pszTag, float *pfXTranslate, float *pfYTranslate, float 
 }
 
 void GetSize(char *szTag, float *pfWidth, float *pfHeight) {
-    char            *pszWidth;
-    char            *pszHeight;
-    char            *pszViewbox;
-    float            fXStart, fYStart, fXEnd, fYEnd;
+    char *pszWidth;
+    char *pszHeight;
+    char *pszViewbox;
+    float fXStart, fYStart, fXEnd, fYEnd;
 
     // Get the variables, which requires replacing the temporary zero terminator
 
@@ -567,13 +524,13 @@ void GetSize(char *szTag, float *pfWidth, float *pfHeight) {
 }
 
 void ProcessTag(FILE *pfileSVG, char **ppszDefs, FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale, unsigned int unSmoothness, char *szDefs) {
-    char            *pszLink;
-    char            *pszEndLink;
-    char            *pszDefs;
-    char            *pszID;
-    char            *szDefsTag;
-    int                nLen;
-    boolean            bInDef;
+    char *pszLink;
+    char *pszEndLink;
+    char *pszDefs;
+    char *pszID;
+    char *szDefsTag;
+    int nLen;
+    boolean bInDef;
 
     if (IsTag(szTag, "use") && (szDefs != NULL)) {
         // Look for the definition
@@ -597,8 +554,7 @@ void ProcessTag(FILE *pfileSVG, char **ppszDefs, FILE *pfileKicad, char cType, c
                             szDefsTag = malloc(nLen);
                             if (szDefsTag == NULL) {
                                 Log("Out of memory.");
-                            }
-                            else {
+                            } else {
                                 ReadNextTagFromDefs(&pszDefs, szDefsTag, nLen);
                                 if (IsTag(szDefsTag, "g")) {
                                     pszID = GetVar(szDefsTag, " id=");
@@ -613,13 +569,11 @@ void ProcessTag(FILE *pfileSVG, char **ppszDefs, FILE *pfileKicad, char cType, c
 
                                         *(pszID + strlen(pszID)) = ' ';
                                     }
-                                }
-                                else if (IsTag(szDefsTag, "/g")) {
+                                } else if (IsTag(szDefsTag, "/g")) {
                                     // End of definition
 
                                     bInDef = false;
-                                }
-                                else if (bInDef) {
+                                } else if (bInDef) {
                                     // Process like any other tag
 
                                     ProcessTag(NULL, &pszDefs, pfileKicad, cType, szDefsTag, fXTranslate, fYTranslate, fRotation, fScale, unSmoothness, szDefs);
@@ -636,42 +590,34 @@ void ProcessTag(FILE *pfileSVG, char **ppszDefs, FILE *pfileKicad, char cType, c
                 }
             }
         }
-    }
-    else if (IsTag(szTag, "text")) {
+    } else if (IsTag(szTag, "text")) {
         ProcessText(pfileSVG, ppszDefs, pfileKicad, cType, szTag, fXTranslate, fYTranslate, fRotation, fScale);
-    }
-    else if (IsTag(szTag, "path")) {
+    } else if (IsTag(szTag, "path")) {
         ProcessPath(pfileKicad, cType, szTag, fXTranslate, fYTranslate, fRotation, fScale, unSmoothness);
-    }
-    else if (IsTag(szTag, "rect")) {
+    } else if (IsTag(szTag, "rect")) {
         ProcessRect(pfileKicad, cType, szTag, fXTranslate, fYTranslate, fRotation, fScale);
-    }
-    else if (IsTag(szTag, "line")) {
+    } else if (IsTag(szTag, "line")) {
         ProcessLine(pfileKicad, cType, szTag, fXTranslate, fYTranslate, fRotation, fScale);
-    }
-    else if (IsTag(szTag, "circle")) {
+    } else if (IsTag(szTag, "circle")) {
         ProcessCircle(pfileKicad, cType, szTag, fXTranslate, fYTranslate, fScale);
-    }
-    else if (IsTag(szTag, "ellipse")) {
+    } else if (IsTag(szTag, "ellipse")) {
         ProcessEllipse(pfileKicad, cType, szTag, fXTranslate, fYTranslate, fRotation, fScale, unSmoothness);
-    }
-    else if (IsTag(szTag, "polygon")) {
+    } else if (IsTag(szTag, "polygon")) {
         ProcessPoly(pfileKicad, cType, szTag, fXTranslate, fYTranslate, fRotation, fScale, true);
-    }
-    else if (IsTag(szTag, "polyline")) {
+    } else if (IsTag(szTag, "polyline")) {
         ProcessPoly(pfileKicad, cType, szTag, fXTranslate, fYTranslate, fRotation, fScale, false);
     }
 }
 
 void ProcessText(FILE *pfileSVG, char **ppszDefs, FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale) {
-    char            *pszX;
-    char            *pszY;
-    float            fXStart, fYStart;
-    char            szText[MAX_TEXT + 1];
-    char            *pszText;
-    int                nChar;
-    boolean            bInTag;
-    float            fXObjectTranslate, fYObjectTranslate, fObjectRotation;
+    char *pszX;
+    char *pszY;
+    float fXStart, fYStart;
+    char szText[MAX_TEXT + 1];
+    char *pszText;
+    int nChar;
+    boolean bInTag;
+    float fXObjectTranslate, fYObjectTranslate, fObjectRotation;
 
     pszText = szText;
     memset(pszText, 0, 255);
@@ -687,58 +633,40 @@ void ProcessText(FILE *pfileSVG, char **ppszDefs, FILE *pfileKicad, char cType, 
     // Get the variables, which requires replacing the temporary zero terminator
 
     pszX = GetVar(szTag, " x=");
-    if (pszX != NULL)
-    {
+    if (pszX != NULL) {
         fXStart = (float) atof(pszX);
         *(pszX + strlen(pszX)) = ' ';
-    }
-    else
-    {
+    } else {
         fXStart = 0;
     }
 
     pszY = GetVar(szTag, " y=");
-    if (pszY != NULL)
-    {
+    if (pszY != NULL) {
         fYStart = (float) atof(pszY);
         *(pszY + strlen(pszY)) = ' ';
-    }
-    else
-    {
+    } else {
         fYStart = 0;
     }
 
-    if (ppszDefs != NULL)
-    {
+    if (ppszDefs != NULL) {
         *ppszDefs += strlen(szTag);
-        while (*(*ppszDefs)++ != '>')
-        {
-        }
+        while (*(*ppszDefs)++ != '>') {}
     }
-    do
-    {
-        if (pfileSVG == NULL)
-        {
+    do {
+        if (pfileSVG == NULL) {
             nChar = **ppszDefs;
             (*ppszDefs)++;
-            if (nChar == 0)
-            {
+            if (nChar == 0) {
                 nChar = EOF;
             }
-        }
-        else
-        {
+        } else {
             nChar = fgetc(pfileSVG);
         }
-        if (nChar != EOF)
-        {
+        if (nChar != EOF) {
             *pszText++ = (char) nChar;
-            if (nChar == '<')
-            {
+            if (nChar == '<') {
                 bInTag = true;
-            }
-            else if (nChar == '>')
-            {
+            } else if (nChar == '>') {
                 bInTag = false;
             }
         }
@@ -747,24 +675,22 @@ void ProcessText(FILE *pfileSVG, char **ppszDefs, FILE *pfileKicad, char cType, 
     // Set the zero terminator
 
     pszText = strrchr(szText, '<');
-    if (pszText != NULL)
-    {
+    if (pszText != NULL) {
         *pszText = 0;
     }
 
     WriteKicadText(pfileKicad, cType, fXStart, fYStart, szText, fXTranslate, fYTranslate, fRotation, fScale);
 }
 
-void ProcessRect(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale)
-{
-    char            *pszWidth;
-    char            *pszHeight;
-    char            *pszX;
-    char            *pszY;
-    char            *pszStrokeWidth;
-    float            fXStart, fYStart, fHeight, fWidth;
-    float            fXObjectTranslate, fYObjectTranslate, fObjectRotation;
-    float            fStrokeWidth;
+void ProcessRect(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale) {
+    char *pszWidth;
+    char *pszHeight;
+    char *pszX;
+    char *pszY;
+    char *pszStrokeWidth;
+    float fXStart, fYStart, fHeight, fWidth;
+    float fXObjectTranslate, fYObjectTranslate, fObjectRotation;
+    float fStrokeWidth;
 
     // Adjust for any transform
 
@@ -776,76 +702,60 @@ void ProcessRect(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
     // Get the variables, which requires replacing the temporary zero terminator
 
     pszWidth = GetVar(szTag, " width=");
-    if (pszWidth != NULL)
-    {
+    if (pszWidth != NULL) {
         fWidth = (float) atof(pszWidth);
         *(pszWidth + strlen(pszWidth)) = ' ';
     }
 
     pszHeight = GetVar(szTag, " height=");
-    if (pszHeight != NULL)
-    {
+    if (pszHeight != NULL) {
         fHeight = (float) atof(pszHeight);
         *(pszHeight + strlen(pszHeight)) = ' ';
     }
 
     pszX = GetVar(szTag, " x=");
-    if (pszX != NULL)
-    {
+    if (pszX != NULL) {
         fXStart = (float) atof(pszX);
         *(pszX + strlen(pszX)) = ' ';
-    }
-    else
-    {
+    } else {
         fXStart = 0;
     }
 
     pszY = GetVar(szTag, " y=");
-    if (pszY != NULL)
-    {
+    if (pszY != NULL) {
         fYStart = (float) atof(pszY);
         *(pszY + strlen(pszY)) = ' ';
-    }
-    else
-    {
+    } else {
         fYStart = 0;
     }
 
     pszStrokeWidth = GetVar(szTag, " stroke-width=");
-    if (pszStrokeWidth != NULL)
-    {
+    if (pszStrokeWidth != NULL) {
         fStrokeWidth = (float) atof(pszStrokeWidth);
         *(pszStrokeWidth + strlen(pszStrokeWidth)) = ' ';
-    }
-    else
-    {
+    } else {
         fStrokeWidth = 0;
     }
 
-    if ((pszWidth != NULL) && (pszHeight != NULL))
-    {
-        if ((fWidth >=0) && (fHeight >= 0))
-        {
+    if ((pszWidth != NULL) && (pszHeight != NULL)) {
+        if ((fWidth >=0) && (fHeight >= 0)) {
             // Draw the rectangle
 
             WriteKicadRect(pfileKicad, cType,  fXStart, fYStart, fXStart + fWidth, fYStart + fHeight, fXTranslate, fYTranslate, fRotation, fStrokeWidth, fScale);
         }
-    }
-    else
-    {
+    } else {
         Log("Invalid rectangle in SVG file (width or height not specified).");
     }
 }
 
-void ProcessCircle(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fScale)
-{
-    char            *pszCx;
-    char            *pszCy;
-    char            *pszRadius;
-    char            *pszStrokeWidth;
-    float            fXCentre, fYCentre, fRadius;
-    float            fXObjectTranslate, fYObjectTranslate, fObjectRotation;
-    float            fStrokeWidth;
+void ProcessCircle(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fScale) {
+    char *pszCx;
+    char *pszCy;
+    char *pszRadius;
+    char *pszStrokeWidth;
+    float fXCentre, fYCentre, fRadius;
+    float fXObjectTranslate, fYObjectTranslate, fObjectRotation;
+    float fStrokeWidth;
 
     // Adjust for any transform
 
@@ -856,72 +766,57 @@ void ProcessCircle(FILE *pfileKicad, char cType, char *szTag, float fXTranslate,
     // Get the variables, which requires replacing the temporary zero terminator
 
     pszCx = GetVar(szTag, " cx=");
-    if (pszCx != NULL)
-    {
+    if (pszCx != NULL) {
         fXCentre = (float) atof(pszCx);
         *(pszCx + strlen(pszCx)) = ' ';
-    }
-    else
-    {
+    } else {
         fXCentre = 0;
     }
 
     pszCy = GetVar(szTag, " cy=");
-    if (pszCy != NULL)
-    {
+    if (pszCy != NULL) {
         fYCentre = (float) atof(pszCy);
         *(pszCy + strlen(pszCy)) = ' ';
-    }
-    else
-    {
+    } else {
         fYCentre = 0;
     }
 
     pszStrokeWidth = GetVar(szTag, " stroke-width=");
-    if (pszStrokeWidth != NULL)
-    {
+    if (pszStrokeWidth != NULL) {
         fStrokeWidth = (float) atof(pszStrokeWidth);
         *(pszStrokeWidth + strlen(pszStrokeWidth)) = ' ';
-    }
-    else
-    {
+    } else {
         fStrokeWidth = 0;
     }
 
     pszRadius = GetVar(szTag, " r=");
-    if (pszRadius != NULL)
-    {
+    if (pszRadius != NULL) {
         fRadius = (float) atof(pszRadius);
         *(pszRadius + strlen(pszRadius)) = ' ';
     }
 
-    if (pszRadius != NULL)
-    {
-        if (fRadius > 0)
-        {
+    if (pszRadius != NULL) {
+        if (fRadius > 0) {
             // Draw the circle
 
             WriteKicadCircle(pfileKicad, cType, fXCentre, fYCentre, fRadius, fXTranslate, fYTranslate, fStrokeWidth, fScale);
         }
-    }
-    else
-    {
+    } else {
         Log("Invalid circle in SVG file (radius not specified).");
     }
 }
 
-void ProcessEllipse(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale, unsigned int unSmoothness)
-{
-    char            *pszCx;
-    char            *pszCy;
-    char            *pszRadiusX;
-    char            *pszRadiusY;
-    char            *pszStrokeWidth;
-    float            fXCentre, fYCentre, fXRadius, fYRadius;
-    float            fXStart, fYStart, fXEnd, fYEnd;
-    unsigned int    unSegment;
-    float            fXObjectTranslate, fYObjectTranslate, fObjectRotation;
-    float            fStrokeWidth;
+void ProcessEllipse(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale, unsigned int unSmoothness) {
+    char *pszCx;
+    char *pszCy;
+    char *pszRadiusX;
+    char *pszRadiusY;
+    char *pszStrokeWidth;
+    float fXCentre, fYCentre, fXRadius, fYRadius;
+    float fXStart, fYStart, fXEnd, fYEnd;
+    unsigned int unSegment;
+    float fXObjectTranslate, fYObjectTranslate, fObjectRotation;
+    float fStrokeWidth;
 
     // Adjust for any transform
 
@@ -933,60 +828,46 @@ void ProcessEllipse(FILE *pfileKicad, char cType, char *szTag, float fXTranslate
     // Get the variables, which requires replacing the temporary zero terminator
 
     pszCx = GetVar(szTag, " cx=");
-    if (pszCx)
-    {
+    if (pszCx) {
         fXCentre = (float) atof(pszCx);
         *(pszCx + strlen(pszCx)) = ' ';
-    }
-    else
-    {
+    } else {
         fXCentre = 0;
     }
 
     pszCy = GetVar(szTag, " cy=");
-    if (pszCy)
-    {
+    if (pszCy) {
         fYCentre = (float) atof(pszCy);
         *(pszCy + strlen(pszCy)) = ' ';
-    }
-    else
-    {
+    } else {
         fYCentre = 0;
     }
 
     pszRadiusX = GetVar(szTag, " rx=");
-    if (pszRadiusX)
-    {
+    if (pszRadiusX) {
         fXRadius = (float) atof(pszRadiusX);
         *(pszRadiusX + strlen(pszRadiusX)) = ' ';
     }
     pszRadiusY = GetVar(szTag, " ry=");
-    if (pszRadiusY)
-    {
+    if (pszRadiusY) {
         fYRadius = (float) atof(pszRadiusY);
         *(pszRadiusY + strlen(pszRadiusY)) = ' ';
     }
 
     pszStrokeWidth = GetVar(szTag, " stroke-width=");
-    if (pszStrokeWidth != NULL)
-    {
+    if (pszStrokeWidth != NULL) {
         fStrokeWidth = (float) atof(pszStrokeWidth);
         *(pszStrokeWidth + strlen(pszStrokeWidth)) = ' ';
-    }
-    else
-    {
+    } else {
         fStrokeWidth = 0;
     }
 
-    if ((pszRadiusX != NULL) && (pszRadiusY != NULL))
-    {
-        if ((fXRadius > 0) && (fYRadius > 0))
-        {
+    if ((pszRadiusX != NULL) && (pszRadiusY != NULL)) {
+        if ((fXRadius > 0) && (fYRadius > 0)) {
             // Draw the ellipse
 
             EllipticArc(fXRadius, fYRadius, fRotation, fXCentre, fYCentre, 0, &fXStart, &fYStart);
-            for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-            {
+            for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                 // Piece-wise linear approximation
 
                 EllipticArc(fXRadius, fYRadius, fRotation, fXCentre, fYCentre, 2 * PI * (float) unSegment / (float) unSmoothness, &fXEnd, &fYEnd);
@@ -996,23 +877,20 @@ void ProcessEllipse(FILE *pfileKicad, char cType, char *szTag, float fXTranslate
                 fYStart = fYEnd;
             }
         }
-    }
-    else
-    {
+    } else {
         Log("Invalid ellipse in SVG file (one or both radii not specified).");
     }
 }
 
-void ProcessLine(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale)
-{
-    char            *pszX1;
-    char            *pszY1;
-    char            *pszX2;
-    char            *pszY2;
-    char            *pszStrokeWidth;
-    float            fXStart, fYStart, fXEnd, fYEnd;
-    float            fXObjectTranslate, fYObjectTranslate, fObjectRotation;
-    float            fStrokeWidth;
+void ProcessLine(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale) {
+    char *pszX1;
+    char *pszY1;
+    char *pszX2;
+    char *pszY2;
+    char *pszStrokeWidth;
+    float fXStart, fYStart, fXEnd, fYEnd;
+    float fXObjectTranslate, fYObjectTranslate, fObjectRotation;
+    float fStrokeWidth;
 
     // Adjust for any transform
 
@@ -1020,8 +898,7 @@ void ProcessLine(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
     fXTranslate += fXObjectTranslate;
     fYTranslate += fYObjectTranslate;
     fRotation += fObjectRotation;
-    if (fRotation != 0)
-    {
+    if (fRotation != 0) {
         Log("Note: Rotation of lines is currently not supported.");
     }
 
@@ -1029,62 +906,51 @@ void ProcessLine(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
     fXStart = fYStart = fXEnd = fYEnd = 0;
     pszX1 = GetVar(szTag, " x1=");
-    if (pszX1 != NULL)
-    {
+    if (pszX1 != NULL) {
         fXStart = (float) atof(pszX1);
         *(pszX1 + strlen(pszX1)) = ' ';
     }
     pszY1 = GetVar(szTag, " y1=");
-    if (pszY1 != NULL)
-    {
+    if (pszY1 != NULL) {
         fYStart = (float) atof(pszY1);
         *(pszY1 + strlen(pszY1)) = ' ';
     }
     pszX2 = GetVar(szTag, " x2=");
-    if (pszX2 != NULL)
-    {
+    if (pszX2 != NULL) {
         fXEnd = (float) atof(pszX2);
         *(pszX2 + strlen(pszX2)) = ' ';
     }
     pszY2 = GetVar(szTag, " y2=");
-    if (pszY2 != NULL)
-    {
+    if (pszY2 != NULL) {
         fYEnd = (float) atof(pszY2);
         *(pszY2 + strlen(pszY2)) = ' ';
     }
 
     pszStrokeWidth = GetVar(szTag, " stroke-width=");
-    if (pszStrokeWidth != NULL)
-    {
+    if (pszStrokeWidth != NULL) {
         fStrokeWidth = (float) atof(pszStrokeWidth);
         *(pszStrokeWidth + strlen(pszStrokeWidth)) = ' ';
-    }
-    else
-    {
+    } else {
         fStrokeWidth = 0;
     }
 
-    if (!((fXStart == fXEnd) && (fYStart == fYEnd)))
-    {
+    if (!((fXStart == fXEnd) && (fYStart == fYEnd))) {
         // Draw the line
 
         WriteKicadLine(pfileKicad, cType,  fXStart, fYStart, fXEnd, fYEnd, fXTranslate, fYTranslate, fStrokeWidth, fScale);
-    }
-    else
-    {
+    } else {
         Log("Invalid line in SVG file (line has zero length).");
     }
 }
 
-void ProcessPoly(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale, boolean bClose)
-{
-    char            *pszPline;
-    char            *pszStrokeWidth;
-    float            fXInit, fYInit;
-    float            fXStart, fXEnd, fYStart, fYEnd;
-    int                nVars;
-    float            fXObjectTranslate, fYObjectTranslate, fObjectRotation;
-    float            fStrokeWidth;
+void ProcessPoly(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale, boolean bClose) {
+    char *pszPline;
+    char *pszStrokeWidth;
+    float fXInit, fYInit;
+    float fXStart, fXEnd, fYStart, fYEnd;
+    int nVars;
+    float fXObjectTranslate, fYObjectTranslate, fObjectRotation;
+    float fStrokeWidth;
 
     // Adjust for any transform
 
@@ -1092,21 +958,17 @@ void ProcessPoly(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
     fXTranslate += fXObjectTranslate;
     fYTranslate += fYObjectTranslate;
     fRotation += fObjectRotation;
-    if (fRotation != 0)
-    {
+    if (fRotation != 0) {
         Log("Note: Rotation of polylines and polygons is currently not supported.");
     }
 
     // Stroke width
 
     pszStrokeWidth = GetVar(szTag, " stroke-width=");
-    if (pszStrokeWidth != NULL)
-    {
+    if (pszStrokeWidth != NULL) {
         fStrokeWidth = (float) atof(pszStrokeWidth);
         *(pszStrokeWidth + strlen(pszStrokeWidth)) = ' ';
-    }
-    else
-    {
+    } else {
         fStrokeWidth = 0;
     }
 
@@ -1114,27 +976,21 @@ void ProcessPoly(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
     pszPline = GetVar(szTag, " points=");
 
-    if (pszPline != NULL)
-    {
+    if (pszPline != NULL) {
         nVars = ReadLinear(pszPline, &fXStart, &fYStart);
         fXInit = fXStart;
         fYInit = fYStart;
-        while ((nVars == 2) && (pszPline != NULL) && (*pszPline != 0))
-        {
+        while ((nVars == 2) && (pszPline != NULL) && (*pszPline != 0)) {
             pszPline = GetNextPoint(pszPline);
-            if (pszPline != NULL)
-            {
+            if (pszPline != NULL) {
                 nVars = ReadLinear(pszPline, &fXEnd, &fYEnd);
-                if (nVars == 2)
-                {
+                if (nVars == 2) {
                     // Draw line
 
                     WriteKicadLine(pfileKicad, cType,  fXStart, fYStart, fXEnd, fYEnd, fXTranslate, fYTranslate, fStrokeWidth, fScale);
                     fXStart = fXEnd;
                     fYStart = fYEnd;
-                }
-                else if (bClose)
-                {
+                } else if (bClose) {
                     // Close polygon
 
                     fXStart = fXEnd;
@@ -1145,28 +1001,25 @@ void ProcessPoly(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 }
             }
         }
-    }
-    else
-    {
+    } else {
         Log("Invalid polyline or polygon in SVG file (no points specified).");
     }
 }
 
-void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale, unsigned int unSmoothness)
-{
-    float            fXStart, fYStart, fXEnd, fYEnd;
-    float            fXCurveStart, fYCurveStart, fXCurveEnd, fYCurveEnd;
-    float            fXControl1, fYControl1, fXControl2, fYControl2;
-    float            fXRadius, fYRadius, fXRot;
-    float            fXDelta, fYDelta, fInitX, fInitY;
-    boolean            bLargeArc, bSweep;
-    char            cLastCommand;
-    boolean            bEndOfLine;
-    unsigned int    unSegment;
-    char            *pszVar;
-    float            fXObjectTranslate, fYObjectTranslate, fObjectRotation;
-    char            *pszStrokeWidth;
-    float            fStrokeWidth;
+void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, float fYTranslate, float fRotation, float fScale, unsigned int unSmoothness) {
+    float fXStart, fYStart, fXEnd, fYEnd;
+    float fXCurveStart, fYCurveStart, fXCurveEnd, fYCurveEnd;
+    float fXControl1, fYControl1, fXControl2, fYControl2;
+    float fXRadius, fYRadius, fXRot;
+    float fXDelta, fYDelta, fInitX, fInitY;
+    boolean bLargeArc, bSweep;
+    char cLastCommand;
+    boolean bEndOfLine;
+    unsigned int unSegment;
+    char *pszVar;
+    float fXObjectTranslate, fYObjectTranslate, fObjectRotation;
+    char *pszStrokeWidth;
+    float fStrokeWidth;
 
     // Adjust for any transform
 
@@ -1174,49 +1027,38 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
     fXTranslate += fXObjectTranslate;
     fYTranslate += fYObjectTranslate;
     fRotation += fObjectRotation;
-    if (fRotation != 0)
-    {
+    if (fRotation != 0) {
         Log("Note: Rotation of paths is currently supported for elliptical arcs only.");
     }
 
     // Stroke width
 
     pszStrokeWidth = GetVar(szTag, " stroke-width=");
-    if (pszStrokeWidth != NULL)
-    {
+    if (pszStrokeWidth != NULL) {
         fStrokeWidth = (float) atof(pszStrokeWidth);
         *(pszStrokeWidth + strlen(pszStrokeWidth)) = ' ';
-    }
-    else
-    {
+    } else {
         fStrokeWidth = 0;
     }
 
     // http://www.w3.org/TR/SVG/paths.html#PathDataMovetoCommands
 
     pszVar = GetVar(szTag, " d=");
-    if (pszVar != NULL)
-    {
+    if (pszVar != NULL) {
         fXStart = fYStart = fXEnd = fYEnd = 0;
         bEndOfLine = false;
         cLastCommand = 'Z';
 
-        do
-        {
-            switch (*pszVar++)
-            {
+        do {
+            switch (*pszVar++) {
             case 'M':
-                if (ReadLinear(pszVar, &fXStart, &fYStart) == 2)
-                {
-                    if (cLastCommand == 'Z')
-                    {
+                if (ReadLinear(pszVar, &fXStart, &fYStart) == 2) {
+                    if (cLastCommand == 'Z') {
                         fInitX = fXStart;
                         fInitY = fYStart;
                     }
                     bEndOfLine = false;
-                }
-                else
-                {
+                } else {
                     pszVar = NULL;
                     Log("Invalid path move in SVG file (too few parameters).");
                 }
@@ -1224,19 +1066,15 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 break;
 
             case 'm':
-                if (ReadLinear(pszVar, &fXDelta, &fYDelta) == 2)
-                {
+                if (ReadLinear(pszVar, &fXDelta, &fYDelta) == 2) {
                     fXStart = fXEnd + fXDelta;
                     fYStart = fYEnd + fYDelta;
-                    if (cLastCommand == 'Z')
-                    {
+                    if (cLastCommand == 'Z') {
                         fInitX = fXStart;
                         fInitY = fYStart;
                     }
                     bEndOfLine = false;
-                }
-                else
-                {
+                } else {
                     pszVar = NULL;
                     Log("Invalid path move in SVG file (too few parameters).");
                 }
@@ -1244,12 +1082,9 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 break;
 
             case 'L':
-                if (ReadLinear(pszVar, &fXEnd, &fYEnd) == 2)
-                {
+                if (ReadLinear(pszVar, &fXEnd, &fYEnd) == 2) {
                     bEndOfLine = true;
-                }
-                else
-                {
+                } else {
                     pszVar = NULL;
                     Log("Invalid path line in SVG file (too few parameters).");
                 }
@@ -1257,14 +1092,11 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 break;
 
             case 'l':
-                if (ReadLinear(pszVar, &fXDelta, &fYDelta) == 2)
-                {
+                if (ReadLinear(pszVar, &fXDelta, &fYDelta) == 2) {
                     fXEnd = fXStart + fXDelta;
                     fYEnd = fYStart + fYDelta;
                     bEndOfLine = true;
-                }
-                else
-                {
+                } else {
                     pszVar = NULL;
                     Log("Invalid path line in SVG file (too few parameters).");
                 }
@@ -1272,12 +1104,9 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 break;
 
             case 'H':
-                if (ReadLinearOffset(pszVar, &fXEnd) == 1)
-                {
+                if (ReadLinearOffset(pszVar, &fXEnd) == 1) {
                     bEndOfLine = true;
-                }
-                else
-                {
+                } else {
                     pszVar = NULL;
                     Log("Invalid path horizontal line in SVG file (too few parameters).");
                 }
@@ -1285,14 +1114,11 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 break;
 
             case 'h':
-                if (ReadLinearOffset(pszVar, &fXDelta) == 1)
-                {
+                if (ReadLinearOffset(pszVar, &fXDelta) == 1) {
                     fXEnd = fXStart + fXDelta;
                     fYEnd = fYStart;
                     bEndOfLine = true;
-                }
-                else
-                {
+                } else {
                     pszVar = NULL;
                     Log("Invalid path horizontal line in SVG file (too few parameters).");
                 }
@@ -1300,12 +1126,9 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 break;
 
             case 'V':
-                if (ReadLinearOffset(pszVar, &fYEnd) == 1)
-                {
+                if (ReadLinearOffset(pszVar, &fYEnd) == 1) {
                     bEndOfLine = true;
-                }
-                else
-                {
+                } else {
                     pszVar = NULL;
                     Log("Invalid path vertical line in SVG file (too few parameters).");
                 }
@@ -1313,14 +1136,11 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 break;
 
             case 'v':
-                if (ReadLinearOffset(pszVar, &fYDelta) == 1)
-                {
+                if (ReadLinearOffset(pszVar, &fYDelta) == 1) {
                     fXEnd = fXStart;
                     fYEnd = fYStart + fYDelta;
                     bEndOfLine = true;
-                }
-                else
-                {
+                } else {
                     pszVar = NULL;
                     Log("Invalid path vertical line in SVG file (too few parameters).");
                 }
@@ -1329,15 +1149,13 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
             case 'C':
                 cLastCommand = *(pszVar - 1);
-                while (ReadCubic(&pszVar, &fXControl1, &fYControl1, &fXControl2, &fYControl2, &fXEnd, &fYEnd) == 6)
-                {
+                while (ReadCubic(&pszVar, &fXControl1, &fYControl1, &fXControl2, &fYControl2, &fXEnd, &fYEnd) == 6) {
                     fXCurveStart = fXStart;
                     fYCurveStart = fYStart;
                     fXCurveEnd = fXEnd;
                     fYCurveEnd = fYEnd;
 
-                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                    {
+                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                         // Piece-wise linear approximation
 
                         fXEnd = fXCurveEnd;
@@ -1354,8 +1172,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
             case 'c':
                 cLastCommand = *(pszVar - 1);
-                while (ReadCubic(&pszVar, &fXControl1, &fYControl1, &fXControl2, &fYControl2, &fXDelta, &fYDelta) == 6)
-                {
+                while (ReadCubic(&pszVar, &fXControl1, &fYControl1, &fXControl2, &fYControl2, &fXDelta, &fYDelta) == 6) {
                     fXControl1 = fXStart + fXControl1;
                     fYControl1 = fYStart + fYControl1;
                     fXControl2 = fXStart + fXControl2;
@@ -1365,8 +1182,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                     fXCurveEnd = fXStart + fXDelta;
                     fYCurveEnd = fYStart + fYDelta;
 
-                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                    {
+                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                         // Piece-wise linear approximation
 
                         fXEnd = fXCurveEnd;
@@ -1385,15 +1201,13 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 cLastCommand = *(pszVar - 1);
                 fXControl1 = (2 * fXEnd) - fXControl2;
                 fYControl1 = (2 * fYEnd) - fYControl2;
-                if (ReadShortCubic(&pszVar, &fXControl2, &fYControl2, &fXEnd, &fYEnd) == 4)
-                {
+                if (ReadShortCubic(&pszVar, &fXControl2, &fYControl2, &fXEnd, &fYEnd) == 4) {
                     fXCurveStart = fXStart;
                     fYCurveStart = fYStart;
                     fXCurveEnd = fXEnd;
                     fYCurveEnd = fYEnd;
 
-                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                    {
+                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                         // Piece-wise linear approximation
 
                         fXEnd = fXCurveEnd;
@@ -1404,9 +1218,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                         fXStart = fXEnd;
                         fYStart = fYEnd;
                     }
-                }
-                else
-                {
+                } else {
                     Log("Invalid short cubic Bezier curve in SVG file (too few parameters).");
                 }
                 bEndOfLine = false;
@@ -1416,8 +1228,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 cLastCommand = *(pszVar - 1);
                 fXControl1 = (2 * fXEnd) - fXControl2;
                 fYControl1 = (2 * fYEnd) - fYControl2;
-                if (ReadShortCubic(&pszVar, &fXControl2, &fYControl2, &fXDelta, &fYDelta) == 4)
-                {
+                if (ReadShortCubic(&pszVar, &fXControl2, &fYControl2, &fXDelta, &fYDelta) == 4) {
                     fXControl2 = fXStart + fXControl2;
                     fYControl2 = fYStart + fYControl2;
                     fXCurveStart = fXStart;
@@ -1425,8 +1236,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                     fXCurveEnd = fXStart + fXDelta;
                     fYCurveEnd = fYStart + fYDelta;
 
-                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                    {
+                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                         // Piece-wise linear approximation
 
                         fXEnd = fXCurveEnd;
@@ -1437,9 +1247,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                         fXStart = fXEnd;
                         fYStart = fYEnd;
                     }
-                }
-                else
-                {
+                } else {
                     Log("Invalid short cubic Bezier curve in SVG file (too few parameters).");
                 }
                 bEndOfLine = false;
@@ -1447,15 +1255,13 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
             case 'Q':
                 cLastCommand = *(pszVar - 1);
-                while (ReadQuadratic(&pszVar, &fXControl1, &fYControl1, &fXEnd, &fYEnd) == 4)
-                {
+                while (ReadQuadratic(&pszVar, &fXControl1, &fYControl1, &fXEnd, &fYEnd) == 4) {
                     fXCurveStart = fXStart;
                     fYCurveStart = fYStart;
                     fXCurveEnd = fXEnd;
                     fYCurveEnd = fYEnd;
 
-                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                    {
+                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                         // Piece-wise linear approximation
 
                         fXEnd = fXCurveEnd;
@@ -1472,8 +1278,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
             case 'q':
                 cLastCommand = *(pszVar - 1);
-                while (ReadQuadratic(&pszVar, &fXControl1, &fYControl1, &fXDelta, &fYDelta) == 6)
-                {
+                while (ReadQuadratic(&pszVar, &fXControl1, &fYControl1, &fXDelta, &fYDelta) == 6) {
                     fXControl1 = fXStart + fXControl1;
                     fYControl1 = fYStart + fYControl1;
                     fXCurveStart = fXStart;
@@ -1481,8 +1286,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                     fXCurveEnd = fXStart + fXDelta;
                     fYCurveEnd = fYStart + fYDelta;
 
-                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                    {
+                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                         // Piece-wise linear approximation
 
                         fXEnd = fXCurveEnd;
@@ -1501,15 +1305,13 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 cLastCommand = *(pszVar - 1);
                 fXControl1 = (2 * fXEnd) - fXControl1;
                 fYControl1 = (2 * fYEnd) - fYControl1;
-                if (ReadShortQuadratic(pszVar, &fXEnd, &fYEnd) == 2)
-                {
+                if (ReadShortQuadratic(pszVar, &fXEnd, &fYEnd) == 2) {
                     fXCurveStart = fXStart;
                     fYCurveStart = fYStart;
                     fXCurveEnd = fXEnd;
                     fYCurveEnd = fYEnd;
 
-                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                    {
+                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                         // Piece-wise linear approximation
 
                         fXEnd = fXCurveEnd;
@@ -1520,9 +1322,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                         fXStart = fXEnd;
                         fYStart = fYEnd;
                     }
-                }
-                else
-                {
+                } else {
                     Log("Invalid short quadratic Bezier curve in SVG file (too few parameters).");
                 }
                 bEndOfLine = false;
@@ -1532,15 +1332,13 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 cLastCommand = *(pszVar - 1);
                 fXControl1 = (2 * fXEnd) - fXControl1;
                 fYControl1 = (2 * fYEnd) - fYControl1;
-                if (ReadShortQuadratic(pszVar, &fXDelta, &fYDelta) == 2)
-                {
+                if (ReadShortQuadratic(pszVar, &fXDelta, &fYDelta) == 2) {
                     fXCurveStart = fXStart;
                     fYCurveStart = fYStart;
                     fXCurveEnd = fXStart + fXDelta;
                     fYCurveEnd = fYStart + fYDelta;
 
-                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                    {
+                    for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                         // Piece-wise linear approximation
 
                         fXEnd = fXCurveEnd;
@@ -1551,9 +1349,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                         fXStart = fXEnd;
                         fYStart = fYEnd;
                     }
-                }
-                else
-                {
+                } else {
                     Log("Invalid short quadratic Bezier curve in SVG file (too few parameters).");
                 }
                 bEndOfLine = false;
@@ -1561,8 +1357,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
             case 'A':
                 cLastCommand = *(pszVar - 1);
-                if (ReadEllipticArc(&pszVar, &fXRadius, &fYRadius, &fXRot, &bLargeArc, &bSweep, &fXEnd, &fYEnd) == 7)
-                {
+                if (ReadEllipticArc(&pszVar, &fXRadius, &fYRadius, &fXRot, &bLargeArc, &bSweep, &fXEnd, &fYEnd) == 7) {
                     float            fXCentre, fYCentre, fStartAngle, fDeltaAngle;
 
                     fXRot = 2 * PI * fXRot / 360;
@@ -1572,36 +1367,28 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
                     // Get angle in range 0 to 2PI - Why?
 
-                    while (fXRot < 0)
-                    {
+                    while (fXRot < 0) {
                         fXRot += 2 * PI;
                     }
                     
                     // Ensure radii are positive - F.6.6.1
 
-                    if (fXRadius < 0)
-                    {
+                    if (fXRadius < 0) {
                         fXRadius = -fXRadius;
                     }
-                    if (fYRadius < 0)
-                    {
+                    if (fYRadius < 0) {
                         fYRadius = -fYRadius;
                     }
 
-                    if (!((fXStart == fXEnd) && (fYStart == fYEnd)))
-                    {
-                        if ((fXRadius == 0) || (fYRadius == 0))
-                        {
+                    if (!((fXStart == fXEnd) && (fYStart == fYEnd))) {
+                        if ((fXRadius == 0) || (fYRadius == 0)) {
                             // Straight line!
 
                             WriteKicadLine(pfileKicad, cType,  fXStart, fYStart, fXEnd, fYEnd, fXTranslate, fYTranslate, fStrokeWidth, fScale);
-                        }
-                        else
-                        {
+                        } else {
                             GetEllipticArcSweep(fXRadius, fYRadius, fXRot, bLargeArc, bSweep, fXStart, fYStart, fXEnd, fYEnd, &fXCentre, &fYCentre, &fStartAngle, &fDeltaAngle);
 
-                            for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                            {
+                            for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                                 // Piece-wise linear approximation
 
                                 EllipticArc(fXRadius, fYRadius, fXRot, fXCentre, fYCentre, fStartAngle + fDeltaAngle * (float) unSegment / (float) unSmoothness, &fXEnd, &fYEnd);
@@ -1611,14 +1398,10 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                                 fYStart = fYEnd;
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         Log("Invalid elliptic arc in SVG file (arc has zero length).");
                     }
-                }
-                else
-                {
+                } else {
                     Log("Invalid elliptic arc in SVG file (too few parameters).");
                 }
                 bEndOfLine = false;
@@ -1626,9 +1409,8 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
             case 'a':
                 cLastCommand = *(pszVar - 1);
-                if (ReadEllipticArc(&pszVar, &fXRadius, &fYRadius, &fXRot, &bLargeArc, &bSweep, &fXDelta, &fYDelta) == 7)
-                {
-                    float            fXCentre, fYCentre, fStartAngle, fDeltaAngle;
+                if (ReadEllipticArc(&pszVar, &fXRadius, &fYRadius, &fXRot, &bLargeArc, &bSweep, &fXDelta, &fYDelta) == 7) {
+                    float fXCentre, fYCentre, fStartAngle, fDeltaAngle;
 
                     fXEnd = fXStart + fXDelta;
                     fYEnd = fYStart + fYDelta;
@@ -1639,36 +1421,28 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
 
                     // Get angle in range 0 to 2PI - Why?
 
-                    while (fXRot < 0)
-                    {
+                    while (fXRot < 0) {
                         fXRot += 2 * PI;
                     }
                     
                     // Ensure radii are positive - F.6.6.1
 
-                    if (fXRadius < 0)
-                    {
+                    if (fXRadius < 0) {
                         fXRadius = -fXRadius;
                     }
-                    if (fYRadius < 0)
-                    {
+                    if (fYRadius < 0) {
                         fYRadius = -fYRadius;
                     }
 
-                    if (!((fXStart == fXEnd) && (fYStart == fYEnd)))
-                    {
-                        if ((fXRadius == 0) || (fYRadius == 0))
-                        {
+                    if (!((fXStart == fXEnd) && (fYStart == fYEnd))) {
+                        if ((fXRadius == 0) || (fYRadius == 0)) {
                             // Straight line!
 
                             WriteKicadLine(pfileKicad, cType,  fXStart, fYStart, fXEnd, fYEnd, fXTranslate, fYTranslate, fStrokeWidth, fScale);
-                        }
-                        else
-                        {
+                        } else {
                             GetEllipticArcSweep(fXRadius, fYRadius, fXRot, bLargeArc, bSweep, fXStart, fYStart, fXEnd, fYEnd, &fXCentre, &fYCentre, &fStartAngle, &fDeltaAngle);
 
-                            for (unSegment = 1; unSegment <= unSmoothness; unSegment++)
-                            {
+                            for (unSegment = 1; unSegment <= unSmoothness; unSegment++) {
                                 // Piece-wise linear approximation
 
                                 EllipticArc(fXRadius, fYRadius, fXRot, fXCentre, fYCentre, fStartAngle + fDeltaAngle * (float) unSegment / (float) unSmoothness, &fXEnd, &fYEnd);
@@ -1678,14 +1452,10 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                                 fYStart = fYEnd;
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         Log("Invalid elliptic arc in SVG file (arc has zero length).");
                     }
-                }
-                else
-                {
+                } else {
                     Log("Invalid elliptic arc in SVG file (too few parameters).");
                 }
                 bEndOfLine = false;
@@ -1702,8 +1472,7 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 break;
             }
 
-            if (bEndOfLine)
-            {
+            if (bEndOfLine) {
                 bEndOfLine = false;
 
                 WriteKicadLine(pfileKicad, cType,  fXStart, fYStart, fXEnd, fYEnd, fXTranslate, fYTranslate, fStrokeWidth, fScale);
@@ -1712,15 +1481,13 @@ void ProcessPath(FILE *pfileKicad, char cType, char *szTag, float fXTranslate, f
                 fYStart = fYEnd;
 
             }
-        }
-        while ((pszVar != NULL) && (*pszVar != 0));
+        } while ((pszVar != NULL) && (*pszVar != 0));
     }
 }
 
-void WriteKicadLine(FILE *pfileKicad, char cType, float fXStart, float fYStart, float fXEnd, float fYEnd, float fXTranslate, float fYTranslate, float fStrokeWidth, float fScale)
-{
-    int            nXStart, nYStart, nXEnd, nYEnd, nStrokeWidth;
-    char        szKicadLine[1000];
+void WriteKicadLine(FILE *pfileKicad, char cType, float fXStart, float fYStart, float fXEnd, float fYEnd, float fXTranslate, float fYTranslate, float fStrokeWidth, float fScale) {
+    int nXStart, nYStart, nXEnd, nYEnd, nStrokeWidth;
+    char szKicadLine[1000];
 
     // Create kicad line
 
